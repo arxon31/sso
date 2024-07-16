@@ -19,5 +19,8 @@ coverage:
 	go generate ./...
 	go test -coverprofile=coverage.out -v -p 1 ./...
 
+lint:
+	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+	golangci-lint run ./... --timeout 1m
 
 
