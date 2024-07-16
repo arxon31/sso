@@ -1,14 +1,18 @@
-name: sso-lint
+name: lint
 
 on:
-  push:
-    branches: [ main ]
   pull_request:
-    branches: [ main ]
+  push:
+    branches:
+      - main
 
 jobs:
   lint:
     runs-on: ubuntu-latest
+    container: golang:1.21
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
       - name: lint
         run: make lint

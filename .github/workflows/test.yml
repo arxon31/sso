@@ -1,14 +1,21 @@
-name: sso-test
+name: test
 
 on:
-  push:
-    branches: [ main ]
   pull_request:
-    branches: [ main ]
+  push:
+    branches:
+      - main
 
 jobs:
-  lint:
+  test:
     runs-on: ubuntu-latest
+    container: golang:1.21
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: verify
+        run: make verify
+
       - name: test
-        run: make lint
+        run: make test
