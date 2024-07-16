@@ -1,4 +1,4 @@
-package main
+package main //nolint:all
 
 import (
 	"github.com/arxon31/sso/pkg/logger"

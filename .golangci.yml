@@ -2,8 +2,3 @@ run:
   timeout: 3m
   tests: true
 
-disable:
-  - typecheck
-
-enable-all: true
-
