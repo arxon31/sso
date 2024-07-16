@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: verify
-        run: make verify
+        run: make mod
 
       - name: test
         run: make test

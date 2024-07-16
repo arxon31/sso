@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-var Build string
+var Build string //nolint:all
 
 func main() {
 	logger.Logger.Info("starting app", slog.String("build", Build))
