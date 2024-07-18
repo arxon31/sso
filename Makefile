@@ -23,4 +23,6 @@ lint:
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 	golangci-lint run ./... --config=./.golangci.yml
 
+format:
+	goimports -local "github.com/arxon31/sso" -w `pwd`
 
