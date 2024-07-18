@@ -37,7 +37,7 @@ func (pg *postgres) SaveUser(ctx context.Context, username, passwordHash, salt s
 		return 0, ErrUserAlreadyExists
 	}
 
-	query := "INSERT into users (username, password_hash, salt) ($1,$2, $3);"
+	query := "INSERT into users (username, password_hash, salt) VALUES ($1, $2, $3);"
 
 	res, err := pg.db.ExecContext(ctx, query, username, passwordHash, salt)
 	if err != nil {

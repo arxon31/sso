@@ -26,3 +26,5 @@ lint:
 format:
 	goimports -local "github.com/arxon31/sso" -w `pwd`
 
+run:
+	docker-compose -f ./deployments/docker-compose-dev.yml up -d --build

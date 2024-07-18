@@ -9,6 +9,7 @@ import (
 	"github.com/arxon31/sso/pkg/pgconn"
 	"github.com/arxon31/yapr-proto/pkg/sso"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 	"log/slog"
 	"net"
 	"os"
@@ -56,6 +57,8 @@ func run() error {
 
 	grpcServer := grpc.NewServer()
 	defer grpcServer.GracefulStop()
+
+	reflection.Register(grpcServer)
 
 	sso.RegisterSSOServer(grpcServer, ssoController)
 

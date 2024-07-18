@@ -2,3 +2,4 @@
 .vscode
 coverage.out
 *_moq_test.go
+postgres

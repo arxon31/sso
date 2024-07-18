@@ -17,7 +17,7 @@ const (
 )
 
 func New() (*sql.DB, error) {
-	postgresDsn := fmt.Sprintf("pgconn://%s:%s@%s:%s/%s",
+	postgresDsn := fmt.Sprintf("pgconn://%s:%s@%s:%s/%s?sslmode=disable",
 		fromEnv(envPostgresUser),
 		fromEnv(envPostgresPass),
 		fromEnv(envPostgresHost),

@@ -1,0 +1,57 @@
+services:
+  sso:
+    container_name: sso
+    build:
+      context: ..
+      dockerfile: ./Dockerfile
+    environment:
+      - PG_HOST=postgres
+      - PG_PORT=5432
+      - PG_USER=postgres
+      - PG_PASS=postgres
+      - PG_DB=sso
+      - SECRET_KEY=supersecretkey
+    ports:
+      - 8081:8081
+    restart: on-failure
+    depends_on:
+      - db
+    networks:
+      - sso
+      #- gophkeeper
+
+  db:
+    container_name: postgres
+    image: postgres
+    restart: on-failure
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=sso
+      - PGDATA=/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - sso
+    volumes:
+      - ../postgres:/var/lib/postgresql/data
+
+  goose:
+    image: artsafin/goose-migrations
+    hostname: goose
+    restart: on-failure
+    depends_on:
+      - db
+    volumes:
+      - ../migrations:/migrations
+    networks:
+      - sso
+    command: "postgres postgres://postgres:postgres@postgres:5432/sso?sslmode=disable up"
+
+
+networks:
+  sso:
+    name: sso-net
+  gophkeeper:
+    name: gophkeeper-net
+    external: true
