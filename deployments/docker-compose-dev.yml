@@ -11,6 +11,7 @@ services:
       - PG_PASS=postgres
       - PG_DB=sso
       - SECRET_KEY=supersecretkey
+      - DEBUG=1
     ports:
       - 8081:8081
     restart: on-failure
@@ -37,6 +38,7 @@ services:
       - ../postgres:/var/lib/postgresql/data
 
   goose:
+    container_name: goose
     image: artsafin/goose-migrations
     hostname: goose
     restart: on-failure
@@ -47,7 +49,6 @@ services:
     networks:
       - sso
     command: "postgres postgres://postgres:postgres@postgres:5432/sso?sslmode=disable up"
-
 
 networks:
   sso:

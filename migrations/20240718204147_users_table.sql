@@ -2,9 +2,9 @@
 -- +goose StatementBegin
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
-    username VARCHAR(255) NOT NULL,
-    password_hash VARCHAR(255) NOT NULL,
-    salt VARCHAR(255) NOT NULL
+    username text NOT NULL,
+    password_hash text NOT NULL,
+    salt bytea NOT NULL
 );
 -- +goose StatementEnd
 

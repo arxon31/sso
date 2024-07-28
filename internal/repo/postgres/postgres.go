@@ -25,7 +25,7 @@ func NewPostgres(db *sql.DB) (*postgres, error) {
 	return &postgres{db: db}, nil
 }
 
-func (pg *postgres) SaveUser(ctx context.Context, username, passwordHash, salt string) (userID int64, err error) {
+func (pg *postgres) SaveUser(ctx context.Context, username string, passwordHash, salt []byte) (userID int64, err error) {
 	const op = "repo.pgconn.RegisterUser"
 
 	exists, err := pg.isExists(ctx, username)
@@ -37,20 +37,20 @@ func (pg *postgres) SaveUser(ctx context.Context, username, passwordHash, salt s
 		return 0, ErrUserAlreadyExists
 	}
 
-	query := "INSERT into users (username, password_hash, salt) VALUES ($1, $2, $3);"
+	query := "INSERT into users (username, password_hash, salt) VALUES ($1, $2, $3) RETURNING id;"
 
-	res, err := pg.db.ExecContext(ctx, query, username, passwordHash, salt)
+	err = pg.db.QueryRowContext(ctx, query, username, passwordHash, salt).Scan(&userID)
 	if err != nil {
 		return 0, fmt.Errorf("%s:%w", op, err)
 	}
 
-	return res.LastInsertId()
+	return
 }
 
 func (pg *postgres) UserPassword(ctx context.Context, username string) (passwordHash, salt string, err error) {
 	const op = "repo.pgconn.UserPassword"
 
-	query := "SELECT (password_hash, salt) from users WHERE username=$1;"
+	query := "SELECT password_hash, salt from users WHERE username=$1;"
 
 	row := pg.db.QueryRowContext(ctx, query, username)
 
@@ -59,7 +59,7 @@ func (pg *postgres) UserPassword(ctx context.Context, username string) (password
 		if errors.Is(err, sql.ErrNoRows) {
 			return "", "", ErrUserNotExists
 		}
-		return "", "", err
+		return "", "", fmt.Errorf("%s:%w", op, err)
 	}
 
 	return passwordHash, salt, nil

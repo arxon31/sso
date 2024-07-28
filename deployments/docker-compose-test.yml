@@ -1,6 +1,6 @@
 services:
-
   goose:
+    container_name: goose
     image: artsafin/goose-migrations
     hostname: goose
     restart: on-failure

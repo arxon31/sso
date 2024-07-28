@@ -20,7 +20,7 @@ var (
 )
 
 type userStorage interface {
-	SaveUser(ctx context.Context, username, passwordHash, salt string) (userID int64, err error)
+	SaveUser(ctx context.Context, username string, passwordHash, salt []byte) (userID int64, err error)
 }
 
 type registerService struct {
@@ -54,18 +54,18 @@ func (s *registerService) Register(ctx context.Context, username, password strin
 	return userID, nil
 }
 
-func (s *registerService) hashPassword(password string) (string, string, error) {
+func (s *registerService) hashPassword(password string) ([]byte, []byte, error) {
 	salt := make([]byte, saltLength)
 
 	_, err := rand.Read(salt)
 	if err != nil {
-		return "", "", err
+		return nil, nil, err
 	}
 
 	passwordHash, err := bcrypt.GenerateFromPassword([]byte(password+string(salt)), bcrypt.DefaultCost)
 	if err != nil {
-		return "", "", err
+		return nil, nil, err
 	}
 
-	return string(passwordHash), string(salt), nil
+	return passwordHash, salt, nil
 }
