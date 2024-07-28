@@ -19,6 +19,7 @@ var (
 	ErrUserNameAlreadyExists = errors.New("user name already exists")
 )
 
+//go:generate moq -out userStorage_moq_test.go . userStorage
 type userStorage interface {
 	SaveUser(ctx context.Context, username string, passwordHash, salt []byte) (userID int64, err error)
 }

@@ -12,10 +12,10 @@ const (
 	duration     = 30 * time.Minute
 )
 
-var secret = secretKeyFromEnv()
-
 // NewToken creates new JWT token for given username
 func NewToken(username string) (string, error) {
+	secret := secretKeyFromEnv()
+
 	token := jwt.New(jwt.SigningMethodHS256)
 
 	claims := token.Claims.(jwt.MapClaims)

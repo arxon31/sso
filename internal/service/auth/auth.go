@@ -17,6 +17,7 @@ var (
 	ErrSomethingWentWrong   = errors.New("something went wrong")
 )
 
+//go:generate moq -out passwordProvider_moq_test.go . passwordProvider
 type passwordProvider interface {
 	UserPassword(ctx context.Context, username string) (passwordHash, salt string, err error)
 }
