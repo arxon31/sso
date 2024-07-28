@@ -20,6 +20,8 @@ coverage:
 	go test -coverprofile=coverage.out -v -p 1 ./...
 
 lint:
+	go install github.com/matryer/moq@v0.3.4
+	go generate ./...
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 	golangci-lint run ./... --config=./.golangci.yml
 
